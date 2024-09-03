@@ -152,8 +152,6 @@ main() {
     check_root
     check_git_installed
     install_docker
-
-    # Thay đổi URL repo và thư mục đích bên dưới theo nhu cầu của bạn
     GIT_REPO_URL=https://github.com/hieuny613/repo-local.git
     CLONE_DIR="/opt/"
 
