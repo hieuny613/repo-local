@@ -146,14 +146,18 @@ install_docker() {
 
 # Clone repository từ Git và run Docker Compose
 clone_and_run_docker_compose() {
-
     if [ -z "$GIT_REPO_URL" ] || [ -z "$CLONE_DIR" ]; then
         log "Git repository URL and clone directory must be provided. Exiting."
         exit 1
     fi
 
+    if [ -d "$CLONE_DIR" ]; then
+        log "Directory $CLONE_DIR already exists. Removing old files..."
+        rm -rf "$CLONE_DIR/*"
+    fi
+
     log "Cloning Git repository from $GIT_REPO_URL..."
-    git clone --force "$GIT_REPO_URL" "$CLONE_DIR"
+    git clone "$GIT_REPO_URL" "$CLONE_DIR"
 
     if [ $? -ne 0 ]; then
         log "Failed to clone the repository. Exiting."
@@ -174,7 +178,6 @@ clone_and_run_docker_compose() {
 
     log "Docker Compose started successfully."
 }
-
 # Hàm main
 main() {
     mkdir -p /var/log/repo/
