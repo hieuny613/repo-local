@@ -10,9 +10,59 @@ log() {
 
 # Kiểm tra quyền root
 check_root() {
-    if [ "$EUID" -ne 0 ]; then
+    if [ "$EUID" -ne 0 ]; thì
         log "Script must be run as root. Exiting."
         exit 1
+    fi
+}
+
+# Kiểm tra Git đã được cài đặt chưa
+check_git_installed() {
+    if command -v git &> /dev/null; then
+        log "Git is already installed. Skipping installation."
+        return 0
+    else
+        log "Git is not installed. Installing Git..."
+        install_git
+    fi
+}
+
+# Cài đặt Git
+install_git() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        OS=$ID
+
+        case "$OS" in
+            ubuntu)
+                log "Installing Git on Ubuntu..."
+                apt-get update -y
+                apt-get install -y git
+                ;;
+            rhel|centos)
+                log "Installing Git on RHEL/CentOS..."
+                yum install -y git
+                ;;
+            *)
+                log "Unsupported operating system for Git installation: $OS. Exiting."
+                exit 1
+                ;;
+        esac
+
+        log "Git installed successfully."
+    else
+        log "Cannot detect operating system. Skipping Git installation."
+    fi
+}
+
+# Kiểm tra Docker đã được cài đặt chưa
+check_docker_installed() {
+    if command -v docker &> /dev/null; then
+        log "Docker is already installed. Skipping installation."
+        return 0
+    else
+        log "Docker is not installed. Installing Docker..."
+        install_docker
     fi
 }
 
@@ -67,7 +117,7 @@ install_docker_rhel_centos() {
     log "Docker installed successfully on RHEL/CentOS."
 }
 
-# Hàm cài đặt Docker dựa trên hệ điều hành
+# Cài đặt Docker dựa trên hệ điều hành
 install_docker() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
@@ -93,35 +143,11 @@ install_docker() {
         exit 1
     fi
 }
-install_git() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        OS=$ID
 
-        case "$OS" in
-            ubuntu)
-                log "Installing Git on Ubuntu..."
-                apt-get update -y
-                apt-get install -y git
-                ;;
-            rhel|centos)
-                log "Installing Git on RHEL/CentOS..."
-                yum install -y git
-                ;;
-            *)
-                log "Unsupported operating system for Git installation: $OS. Exiting."
-                exit 1
-                ;;
-        esac
-
-        log "Git installed successfully."
-    else
-        log "Cannot detect operating system. Skipping Git installation."
-    fi
-}
+# Clone repository từ Git và run Docker Compose
 clone_and_run_docker_compose() {
 
-    if [ -z "$GIT_REPO_URL" ] || [ -z "$CLONE_DIR" ]; then
+    if [ -z "$GIT_REPO_URL" ] || [ -z "$CLONE_DIR" ]; thì
         log "Git repository URL and clone directory must be provided. Exiting."
         exit 1
     fi
@@ -129,7 +155,7 @@ clone_and_run_docker_compose() {
     log "Cloning Git repository from $GIT_REPO_URL..."
     git clone "$GIT_REPO_URL" "$CLONE_DIR"
 
-    if [ $? -ne 0 ]; then
+    if [ $? -ne 0 ]; thì
         log "Failed to clone the repository. Exiting."
         exit 1
     fi
@@ -141,20 +167,23 @@ clone_and_run_docker_compose() {
     log "Running Docker Compose..."
     docker compose up -d
 
-    if [ $? -ne 0 ]; then
+    if [ $? -ne 0 ]; thì
         log "Failed to run Docker Compose. Exiting."
         exit 1
     fi
 
     log "Docker Compose started successfully."
 }
+
+# Hàm main
 main() {
-    mkdir /var/log/repo/
+    mkdir -p /var/log/repo/
     check_root
     check_git_installed
-    install_docker
-    GIT_REPO_URL=https://github.com/hieuny613/repo-local.git
-    CLONE_DIR="/opt/"
+    check_docker_installed
+
+    GIT_REPO_URL="https://github.com/hieuny613/repo-local.git"
+    CLONE_DIR="/opt/repo-local"
 
     clone_and_run_docker_compose "$GIT_REPO_URL" "$CLONE_DIR"
 }
