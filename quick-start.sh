@@ -2,8 +2,7 @@
 
 # Đường dẫn log
 LOG_FILE="/var/log/repo/repo_local.log"
-GIT_REPO_URL=https://github.com/hieuny613/repo-local.git
-CLONE_DIR="/opt/"
+
 # Hàm ghi log
 log() {
     echo "$(date +'%d-%m-%YT%H:%M:%S') - $1" | tee -a "$LOG_FILE"
@@ -149,3 +148,17 @@ clone_and_run_docker_compose() {
 
     log "Docker Compose started successfully."
 }
+main() {
+    check_root
+    check_git_installed
+    install_docker
+
+    # Thay đổi URL repo và thư mục đích bên dưới theo nhu cầu của bạn
+    GIT_REPO_URL=https://github.com/hieuny613/repo-local.git
+    CLONE_DIR="/opt/"
+
+    clone_and_run_docker_compose "$GIT_REPO_URL" "$CLONE_DIR"
+}
+
+# Gọi hàm main
+main
