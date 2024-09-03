@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  redhat8:
+    build:
+      context: ./redhat-8
+      dockerfile: Dockerfile
+    volumes:
+      - /repo/redhat:/redhat
+    container_name: redhat8-container
+    networks:
+      - repo-network
+
+  redhat9:
+    build:
+      context: ./redhat-9
+      dockerfile: Dockerfile
+    volumes:
+      - /repo/redhat:/redhat
+    container_name: redhat9-container
+    networks:
+      - repo-network
+
+networks:
+  repo-network:
+    driver: bridge
