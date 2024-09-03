@@ -149,6 +149,7 @@ clone_and_run_docker_compose() {
     log "Docker Compose started successfully."
 }
 main() {
+    mkdir /var/log/repo/
     check_root
     check_git_installed
     install_docker
