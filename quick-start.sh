@@ -10,7 +10,7 @@ log() {
 
 # Kiểm tra quyền root
 check_root() {
-    if [ "$EUID" -ne 0 ]; thì
+    if [ "$EUID" -ne 0 ]; then
         log "Script must be run as root. Exiting."
         exit 1
     fi
@@ -147,7 +147,7 @@ install_docker() {
 # Clone repository từ Git và run Docker Compose
 clone_and_run_docker_compose() {
 
-    if [ -z "$GIT_REPO_URL" ] || [ -z "$CLONE_DIR" ]; thì
+    if [ -z "$GIT_REPO_URL" ] || [ -z "$CLONE_DIR" ]; then
         log "Git repository URL and clone directory must be provided. Exiting."
         exit 1
     fi
@@ -155,7 +155,7 @@ clone_and_run_docker_compose() {
     log "Cloning Git repository from $GIT_REPO_URL..."
     git clone "$GIT_REPO_URL" "$CLONE_DIR"
 
-    if [ $? -ne 0 ]; thì
+    if [ $? -ne 0 ]; then
         log "Failed to clone the repository. Exiting."
         exit 1
     fi
@@ -167,7 +167,7 @@ clone_and_run_docker_compose() {
     log "Running Docker Compose..."
     docker compose up -d
 
-    if [ $? -ne 0 ]; thì
+    if [ $? -ne 0 ]; then
         log "Failed to run Docker Compose. Exiting."
         exit 1
     fi
