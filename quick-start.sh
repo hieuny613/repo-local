@@ -153,7 +153,7 @@ clone_and_run_docker_compose() {
     fi
 
     log "Cloning Git repository from $GIT_REPO_URL..."
-    git clone "$GIT_REPO_URL" "$CLONE_DIR"
+    git clone --force "$GIT_REPO_URL" "$CLONE_DIR"
 
     if [ $? -ne 0 ]; then
         log "Failed to clone the repository. Exiting."

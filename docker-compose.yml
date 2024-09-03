@@ -7,16 +7,17 @@ services:
       dockerfile: Dockerfile
     volumes:
       - /repo/redhat:/redhat
+      - /var/log/repo:/var/log/repo
     container_name: redhat8-container
     networks:
       - repo-network
-
   redhat9:
     build:
       context: ./redhat-9
       dockerfile: Dockerfile
     volumes:
       - /repo/redhat:/redhat
+      - /var/log/repo:/var/log/repo
     container_name: redhat9-container
     networks:
       - repo-network
