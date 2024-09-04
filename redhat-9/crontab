@@ -1,1 +1,1 @@
-0 0 * * * /bin/bash /script/rsync-repo-redhat.sh
+0 0 * * * bash /script/rsync-repo-redhat.sh
