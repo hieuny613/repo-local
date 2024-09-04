@@ -13,5 +13,5 @@ COPY --chown=root:root crontab /etc/crontab
 RUN chmod 0644 /etc/crontab
 RUN touch /var/log/cron.log
 RUN crontab /etc/crontab
-RUN bash /script/rsync-repo-redhat.sh
-CMD ["/usr/sbin/crond", "-n"]
+RUN chmod +x /script/entrypoint.sh
+ENTRYPOINT ["/script/entrypoint.sh"]
