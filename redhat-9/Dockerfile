@@ -2,7 +2,7 @@ FROM redhat/ubi9
 RUN rm -rf /etc/yum.repos.d/*
 ADD --chown=root:root key/* /etc/pki/entitlement/
 ADD --chown=root:root repo/* /etc/yum.repos.d/
-ADD --chown=root:root script/rsync-repo-redhat.sh /script/rsync-repo-redhat.sh
+ADD --chown=root:root script/* /script/
 RUN dnf repolist && \
     dnf update -y
 RUN dnf install -y yum-utils createrepo parallel cronie vim tzdata 
